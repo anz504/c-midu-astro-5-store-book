@@ -1,13 +1,47 @@
 ---
 
 import Layout from '../layouts/Layout.astro';
-
+import "../styles/global.css";
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import { getCollection } from 'astro:content';
+
+const books = await getCollection('books');
+
+console.log(books);
+
+
 ---
 
 <Layout title="Store Book by ANZ">
 	<main>
-		<h1>Store Book</h1>
+		<h1 class="text-center text-7xl font-extrabold">Store Book</h1>
+		{books.map((book) => (
+			<div>
+				<h2>{book.data.title}</h2>
+				<p>{book.data.author}</p>
+				<p>{book.data.year}</p>
+				<p>{book.data.readtime}</p>
+				<p>{book.data.description}</p>
+			</div>
+		))}
 	</main>
+
+	<section aria-label="Recommended Books">
+		<div class="px-4 mx-auto max-w-screen-xl">
+		{books.map((book) => {
+			const { slug, data } = book;
+			const { title, author, year, readtime, description, img } = data;
+
+
+			return (
+			<article class="flex ">
+				<img class="w-full rounded-lg" src={`/images/${img}`} alt={title} />
+				<h3>{title}</h3>
+
+			</article>
+		)})
+		}
+		</div>
+	</section>
 </Layout>
